@@ -1,6 +1,6 @@
 """Point d'entrée principal pour la démonstration."""
 
-from calculate import calculate_total
+from calculate_total import calculate_total
 
 rules = {
     "volume_discounts": {5: 0.10, 10: 0.20},
