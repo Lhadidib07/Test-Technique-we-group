@@ -16,12 +16,14 @@ def calculate_total(cart: list[dict], rules: dict) -> float:
 
     # 2) Calcule le total
     total = 0.0
-
     for category, units in category_units.items():
         if category in bundle_categories:
-            units_sorted = sorted(units, reverse=True)
-            free_amount = sum(units_sorted[2::3])
-            total += sum(units_sorted) - free_amount
+            free_amount = 0.0
+            for i in range(0, len(units) - len(units) % 3, 3):
+                chunk = units[i: i + 3]
+                free_amount += min(chunk)  # Le moins cher du paquet de 3
+
+            total += sum(units) - free_amount
         else:
             total += sum(units)
 
@@ -41,8 +43,6 @@ if __name__ == "__main__":
     ]
 
     assert calculate_total(cart, rules) == 145.00
-
     result = calculate_total(cart, rules)
     print(f"Total calculé : {result}")
-    assert result == 145.00
-    print("OK : le test fourni dans l'énoncé passe.")
+

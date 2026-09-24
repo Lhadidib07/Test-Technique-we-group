@@ -75,3 +75,15 @@ def test_rounding_float_precision(default_rules):
         {"id": "B", "category": "tech", "price": 9.95, "qty": 1},
     ]
     assert calculate_total(cart, default_rules) == 29.94
+
+def test_bundle_respects_cart_arrival_order(default_rules):
+    cart = [
+        {"id": "A", "category": "book", "price": 10.0, "qty": 2},
+        {"id": "B", "category": "book", "price": 50.0, "qty": 1},
+        {"id": "C", "category": "book", "price": 40.0, "qty": 3},
+    ]
+
+    # Total brut : (2 x 10) + 50 + (3 x 40) = 20 + 50 + 120 = 190.0€
+    # Déductions : 10€ (lot 1) + 40€ (lot 2) = 50.0€
+    # Total attendu : 190.0 - 50.0 = 140.0€
+    assert calculate_total(cart, default_rules) == 140.0
