@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+
 def calculate_total(cart: list[dict], rules: dict) -> float:
     volume_discounts = rules.get("volume_discounts", {})
     bundle_categories = set(rules.get("bundle_categories", []))
@@ -31,7 +32,6 @@ def calculate_total(cart: list[dict], rules: dict) -> float:
 
 
 if __name__ == "__main__":
-
     rules = {
         "volume_discounts": {5: 0.10, 10: 0.20},  # qty >= 5: -10%, qty >= 10: -20%
         "bundle_categories": ["book"],  # 3e offert par tranche de 3
@@ -45,4 +45,3 @@ if __name__ == "__main__":
     assert calculate_total(cart, rules) == 145.00
     result = calculate_total(cart, rules)
     print(f"Total calculé : {result}")
-
