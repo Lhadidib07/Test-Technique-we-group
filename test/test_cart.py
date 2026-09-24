@@ -1,7 +1,7 @@
 """Tests unitaires pour la fonction calculate_total."""
 
 import pytest
-from main import calculate_total
+from calculate_total import calculate_total
 
 
 @pytest.fixture(name="rules")
