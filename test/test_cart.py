@@ -3,7 +3,6 @@
 from decimal import Decimal
 
 import pytest
-
 from calculate_total import calculate_total
 
 
@@ -100,6 +99,7 @@ def test_bundle_respects_cart_arrival_order(rules):
     ]
     assert calculate_total(cart, rules) == Decimal("140.00")
 
+
 def test_huge_quantities_performance(rules):
     """Vérifie que les quantités gigantesques s'exécutent en temps constant sans OOM."""
     cart = [
@@ -108,12 +108,15 @@ def test_huge_quantities_performance(rules):
     ]
     # Seuil 10 atteint -> remise volume 20% -> livre A à 8.00€
     # Livre B (qty 2 < 5) -> 0% remise -> 20.00€
-    # Livre A : 3_000_000_000_001 // 3 = 1_000_000_000_000 bundles complets -> 2_000_000_000_000 payés = 16_000_000_000_000€
+    # Livre A : 3_000_000_000_001 // 3 = 1_000_000_000_000 bundles complets
+    #           -> 2_000_000_000_000 payés = 16_000_000_000_000€
     # Reste de A : 1 exemplaire à 8.00€
     # Reste de B : 2 exemplaires à 20.00€
-    # Trio mixte : [8.00, 20.00, 20.00] -> le moins cher (8.00€) est offert, on paie les deux à 20.00€ = 40.00€
+    # Trio mixte : [8.00, 20.00, 20.00] -> le moins cher (8.00€) est offert
+    #              Total payé trio = 40.00€
     # Total attendu : 16_000_000_000_040.00€
     assert calculate_total(cart, rules) == Decimal("16000000000040.00")
+
 
 def test_bundle_mixed_remainders_across_three_items(rules):
     """Trois articles différents avec qty=1 forment ensemble un lot de 3."""
@@ -135,6 +138,7 @@ def test_zero_quantity_item(rules):
     ]
     assert calculate_total(cart, rules) == Decimal("50.00")
 
+
 def test_bundle_interleaved_with_other_categories(rules):
     """Les articles hors promotion intercalés ne perturbent pas le lot de la catégorie cible."""
     cart = [
@@ -148,6 +152,7 @@ def test_bundle_interleaved_with_other_categories(rules):
     # Livres : 10 + 20 + 15 = 45€ - min(10, 20, 15) [10€] = 35€
     # Total attendu : 185.00€
     assert calculate_total(cart, rules) == Decimal("185.00")
+
 
 def test_precision_loss_without_decimal():
     """Valide l'évitement du bug d'arrondi des flottants IEEE 754.
